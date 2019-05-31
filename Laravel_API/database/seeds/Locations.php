@@ -10,7 +10,7 @@ class LocationSeeder extends Seeder
      *
      * @var string
      */
-    protected $PATH = "C:\Users\Da'\Documents\GitHub\CoffeeDropAPIChallenge\location_data.csv";
+    protected $PATH = __DIR__."\location_data.csv";
     /**
      * Run the database seeds.
      *
@@ -19,7 +19,7 @@ class LocationSeeder extends Seeder
     public function run()
     {
         //Check the path integrity.
-         if ( ( $h = fopen( $this->PATH, "r" ) ) !== FALSE ) {
+         if ( ( $h = fopen($this->PATH, "r" ) ) !== FALSE ) {
             // Actual line
             $line = 1;
             while ( ( $data = fgetcsv( $h, 1000, "," ) ) !== FALSE ) {
@@ -32,6 +32,7 @@ class LocationSeeder extends Seeder
                 $latLngResult = Tools::getLatLng($data[0]);
                 if($latLngResult['status'])
                 {
+                     //The next variable will create the location's timetable. (null=close in that day)
                     $timetable = [
                         'Mon' => (($data[1]!=null and $data[8]!=null) ? ['open'=> $data[1],'close'=>$data[8]] : null),
                         'Tue' => (($data[2]!=null and $data[9]!=null) ? ['open'=> $data[2],'close'=>$data[9]] : null),
