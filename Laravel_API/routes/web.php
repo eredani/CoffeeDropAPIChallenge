@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/{?1}/{?2}', function () {
+Route::get('/{p?}/{p2?}', function () {
     return view('welcome');
 });

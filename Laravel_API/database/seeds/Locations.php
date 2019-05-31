@@ -49,7 +49,7 @@ class LocationSeeder extends Seeder
                     ];
                     //New Object to add a new Location
                     try {
-                        $location = new App\Locations();
+                    $location = new App\Locations();
                     $location->postCode = str_replace(' ','',$data[0]);
                     $location->lat = $lat;
                     $location->lng = $lng;

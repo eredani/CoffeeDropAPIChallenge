@@ -16,25 +16,35 @@ class API extends Controller
         //In the try the code will check if the postcode is right.
         try {
             $infoPostCode = Tools::getLatLng(str_replace(' ','',$code));
-        } catch (\Exception $ex) {
-            //If the postcode is incorect the API will return the next respond.
+
+        if($infoPostCode['status'])
+        {
+                    //In the next line I parsed the respond from the above function.
+                    [ "lat" => $latitude, "lng" => $longitude ] = $infoPostCode;
+                    //The following formula is to calculate the distance using the lat and lng.
+                    $dist = "( 3959 * acos( cos( radians($latitude) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians($longitude) ) + sin( radians($latitude) ) * sin(radians(lat)) ) )";
+                    //The next query will select from the Locations table the nearest postcode.
+                    $closeLocation = Locations::select('*',DB::raw("$dist AS dist" ))->orderBy('dist', 'ASC')->take(1)->get();
+                    //The next line will decode the timetable to be easy to use in another apps.
+                    $closeLocation[0]->timeTable = json_decode($closeLocation[0]->timeTable);
+                    //Using the respond from $infoPostCode I created an address based on City,Region and the Postcode.
+                    $closeLocation[0]->address = $infoPostCode['region'].', '.$infoPostCode['city'].', '.$closeLocation[0]->postCode;
+                    //Using the next collection resource I will return just what I need to return in this case the address and timetable.
+                    return NearByMe::collection($closeLocation);
+        }else{
             return response()->json([
                 'status' => false,
                 'error' => 'The Postcode is invalid!'
             ],200);
         }
-        //In the next line I parsed the respond from the above function.
-        [ "lat" => $latitude, "lng" => $longitude ] = $infoPostCode;
-        //The following formula is to calculate the distance using the lat and lng.
-        $dist = "( 3959 * acos( cos( radians($latitude) ) * cos( radians( lat ) ) * cos( radians( lng ) - radians($longitude) ) + sin( radians($latitude) ) * sin(radians(lat)) ) )";
-        //The next query will select from the Locations table the nearest postcode.
-        $closeLocation = Locations::select('*',DB::raw("$dist AS dist" ))->orderBy('dist', 'ASC')->take(1)->get();
-        //The next line will decode the timetable to be easy to use in another apps.
-        $closeLocation[0]->timeTable = json_decode($closeLocation[0]->timeTable);
-        //Using the respond from $infoPostCode I created an address based on City,Region and the Postcode.
-        $closeLocation[0]->address = $infoPostCode['region'].', '.$infoPostCode['city'].', '.$closeLocation[0]->postCode;
-        //Using the next collection resource I will return just what I need to return in this case the address and timetable.
-        return NearByMe::collection($closeLocation);
+        } catch (\Exception $ex) {
+            //If the postcode is incorect the API will return the next respond.
+            return response()->json([
+                'status' => false,
+                'message' => 'The Postcode is invalid!'
+            ],200);
+        }
+
     }
     public function newLocation(Request $r)
     {
@@ -108,10 +118,14 @@ class API extends Controller
             $capsules += ($ristretto + $espresso + $lungo);
             if($capsules === 0){
                 //Return the next message when the quantity is 0.
-                return response()->json(['message' => 'Invalid quantity'], 200);
+                return response()->json([
+                    'status' => false,
+                    'error' => "Invalid quantity"
+                    ],200);
+
             }
             $moneyBack = 0;
-            //Depend of the total capsules the next switch will apply a formula to get the total cashback.
+            //Depend of the total capsules the next switch I will apply a formula to get the total cashback.
             switch ($capsules) {
                 case 0 < $capsules && $capsules <= 50:
                     $moneyBack = $ristretto * 2 + $espresso * 4 + $lungo * 6;
