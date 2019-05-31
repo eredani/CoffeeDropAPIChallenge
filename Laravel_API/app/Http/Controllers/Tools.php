@@ -11,7 +11,8 @@ class Tools extends Controller
     public static function getLatLng(string $code)
     {
        try {
-        $req = new \GuzzleHttp\Client();
+        $req = new \GuzzleHttp\Client();//I called the object in my function.
+        //I used this library to make a request to the ENDPOINT API to lookup the postcode.
         $get = $req->request('GET',env('Postcode_Lookup_API').$code);
         if ($get->getStatusCode() == 200 ) {
             $r = json_decode($get->getBody())->result;
