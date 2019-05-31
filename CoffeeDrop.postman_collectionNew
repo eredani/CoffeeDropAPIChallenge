@@ -1,0 +1,86 @@
+{
+	"info": {
+		"_postman_id": "7e0af795-6a6d-41a0-bbef-f4b526e1c848",
+		"name": "CoffeeDrop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetNearestLocation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:8000/api/v1/nearby/b 4 6nb",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"nearby",
+						"b 4 6nb"
+					]
+				},
+				"description": "Returns the address and opening times of the nearest CoffeeDrop location"
+			},
+			"response": []
+		},
+		{
+			"name": "CreateNewLocation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n      \"postcode\": \"CT156JJ\",\n      \"opening_times\": {\"monday\" : \"09:00\", \"tuesday\" : \"09:00\", \"saturday\" : \"08:30\"},\n      \"closing_times\": {\"monday\" : \"19:00\", \"tuesday\" : \"19:00\", \"saturday\" : \"18:30\"}\n}\n"
+				},
+				"url": {
+					"raw": "127.0.0.1:8000/api/v1/new",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CalculateCashback",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n      \"Ristretto\": 10,\n      \"Espresso\": 100,\n      \"Lungo\":30\n}\n\n"
+				},
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	]
+}
