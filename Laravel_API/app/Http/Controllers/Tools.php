@@ -13,22 +13,25 @@ class Tools extends Controller
        try {
         $req = new \GuzzleHttp\Client();//I called the object in my function.
         //I used this library to make a request to the ENDPOINT API to lookup the postcode.
-        $get = $req->request('GET',env('Postcode_Lookup_API').$code);
-        if ($get->getStatusCode() == 200 ) {
-            $r = json_decode($get->getBody())->result;
+        $get = $req->request('GET',"http://api.postcodes.io/postcodes/".$code);
+      
+            $r= $get->getBody()->getContents();
+            $data=json_decode($r,true);    
+            if($data['status']!="200")
+            {
+                return [
+                    'status' => false
+                ];
+            }   
             //When the status is true the code will return both coords.
             return [
                 'status' => true,
-                'lat' => $r->latitude,
-                'lng' => $r->longitude,
-                'region' => $r->region,
-                'city' => $r->nuts
+                'lat' => $data['result']['latitude'],
+                'lng' => $data['result']['longitude'],
+                'region' => $data['result']['region'],
+                'city' => $data['result']['nuts']
             ];
-        } else {
-            return [
-                'status' => false
-            ];
-        }
+
        } catch (\Exception $ex) {
             return [
                 'status' => false

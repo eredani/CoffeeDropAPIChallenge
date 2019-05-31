@@ -32,12 +32,12 @@ class LocationSeeder extends Seeder
                     continue;
                 }
                 //Check Postcode and get the Lat/Lng if the Postcode is validated.
-                $latLngResult = Tools::getLatLng(str_replace(' ','',$data[0]));
+                $latLngResult = Tools::getLatLng($data[0]);
                 if($latLngResult['status'])
                 {
                 [ "lat" => $lat, "lng" => $lng ] = $latLngResult;
                
-                     //The next variable will create the location's timetable. (null=close in that day)
+                    //The next variable will create the location's timetable. (null=close in that day)
                     $timetable = [
                         'Mon' => (($data[1]!=null and $data[8]!=null) ? ['open'=> $data[1],'close'=>$data[8]] : null),
                         'Tue' => (($data[2]!=null and $data[9]!=null) ? ['open'=> $data[2],'close'=>$data[9]] : null),
