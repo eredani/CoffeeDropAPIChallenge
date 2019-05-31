@@ -11,8 +11,6 @@ use App\Http\Requests\newLocation as NewLoc;
 use App\OldCashBack;
 class API extends Controller
 {
-    
-    protected $PATH = "\location_data.csv";
     public function closeLocation(string $code)
     {
         //In the try the code will check if the postcode is right.
