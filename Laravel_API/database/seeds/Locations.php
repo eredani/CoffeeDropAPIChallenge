@@ -60,7 +60,7 @@ class LocationSeeder extends Seeder
                     }
                 }
                 else{
-                    echo "Error";
+                    echo $data[0]."Error\n";
                 }
                 // Increase line number.
                 $line++;
