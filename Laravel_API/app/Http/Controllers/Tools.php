@@ -26,12 +26,12 @@ class Tools extends Controller
             ];
         } else {
             return [
-                'status' => "aici"
+                'status' => false
             ];
         }
        } catch (\Exception $ex) {
             return [
-                'status' => $ex
+                'status' => false
             ];
        }
     }
