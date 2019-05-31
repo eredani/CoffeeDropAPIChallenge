@@ -3,6 +3,9 @@
 use Illuminate\Database\Seeder;
 use App\Locations;
 use App\Http\Controllers\Tools;
+use function GuzzleHttp\json_decode;
+use function GuzzleHttp\json_encode;
+
 class LocationSeeder extends Seeder
 {
         /**
@@ -10,7 +13,7 @@ class LocationSeeder extends Seeder
      *
      * @var string
      */
-    protected $PATH = __DIR__."\location_data.csv";
+    protected $PATH = __DIR__."/location_data.csv";
     /**
      * Run the database seeds.
      *
@@ -29,9 +32,11 @@ class LocationSeeder extends Seeder
                     continue;
                 }
                 //Check Postcode and get the Lat/Lng if the Postcode is validated.
-                $latLngResult = Tools::getLatLng($data[0]);
+                $latLngResult = Tools::getLatLng(str_replace(' ','',$data[0]));
                 if($latLngResult['status'])
                 {
+                [ "lat" => $lat, "lng" => $lng ] = $latLngResult;
+               
                      //The next variable will create the location's timetable. (null=close in that day)
                     $timetable = [
                         'Mon' => (($data[1]!=null and $data[8]!=null) ? ['open'=> $data[1],'close'=>$data[8]] : null),
@@ -43,12 +48,19 @@ class LocationSeeder extends Seeder
                         'Sun' => (($data[7]!=null and $data[14]!=null) ? ['open'=> $data[7],'close'=>$data[14]] : null),
                     ];
                     //New Object to add a new Location
-                    $location = new Locations();
+                    try {
+                        $location = new App\Locations();
                     $location->postCode = str_replace(' ','',$data[0]);
-                    $location->lat = $latLngResult['lat'];
-                    $location->lng = $latLngResult['lng'];
+                    $location->lat = $lat;
+                    $location->lng = $lng;
                     $location->timeTable = json_encode($timetable);
                     $location->save();
+                    } catch (\Exception $th) {
+                        echo "The Postcode(".$data[0].") already exist.\n";
+                    }
+                }
+                else{
+                    echo "Error";
                 }
                 // Increase line number.
                 $line++;

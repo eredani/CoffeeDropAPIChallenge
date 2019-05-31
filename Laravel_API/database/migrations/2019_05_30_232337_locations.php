@@ -15,7 +15,7 @@ class Locations extends Migration
     {
         Schema::create('locations', function ( Blueprint $table ) {
             $table->increments('id');
-            $table->string('postCode');
+            $table->string('postCode')->unique();
             $table->decimal('lat', 11, 8 );
             $table->decimal('lng', 11, 8 );
             $table->json('timeTable');
