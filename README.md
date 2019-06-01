@@ -1,6 +1,13 @@
 # Coffee Drop API
 This task requires you to build a JSON API. HTML, CSS and Javascript work will be reviewed but is entirely optional.
- 
+Clone the git and run the next commands:
+composer install
+cp .env.example .env
+php artisan migrate
+php artisan db:seed
+npm install
+npm run prod
+After that you can see the frontend and use the backend
 ## Brief
 A brand new start up, CoffeeDrop, have spotted a gap in the market to build an Android and IOS mobile app which shows their existing 16 national coffee shops, listing them as "locations" for recycling Nespresso coffee pods, for which the client will recieve "cashback" - money for each pod.
 After initial meetings with CoffeeDrop, they have asked us to develop a small API which allows a customer using their mobile app to enter their postcode, and be informed of their nearest (as the crow flies) CoffeeDrop location and their opening times.
