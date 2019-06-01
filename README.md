@@ -8,6 +8,7 @@ This task requires you to build a JSON API. HTML, CSS and Javascript work will b
 5. php artisan db:seed
 6. npm install
 7. npm run prod
+8. php artisan serve
 ## After that you can see the frontend and use the backend
 ## Brief
 A brand new start up, CoffeeDrop, have spotted a gap in the market to build an Android and IOS mobile app which shows their existing 16 national coffee shops, listing them as "locations" for recycling Nespresso coffee pods, for which the client will recieve "cashback" - money for each pod.
